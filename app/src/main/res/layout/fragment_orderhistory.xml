@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.OrderHistoryFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/tvChoiceSearchMode"
+            android:text="選擇桌號:"
+            android:textColor="@color/colorRed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/tvChoiceSearchMode">
+
+            <Spinner
+                android:id="@+id/spServeDeskSearch"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:id="@+id/serveUpdate"
+                android:text="更新"
+                android:textSize="16sp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:background="@color/colorYellow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/linearLayout1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:textColor="@color/colorRed"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="訂單編號"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:textColor="@color/colorRed"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="餐點名稱"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:textColor="@color/colorRed"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="金額"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:textColor="@color/colorRed"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="確認出餐"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvServe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout2"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+</FrameLayout>
+

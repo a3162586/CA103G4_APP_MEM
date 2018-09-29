@@ -6,4 +6,42 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="title_home">首頁</string>
+    <string name="title_orderHistory">訂購查詢</string>
+    <string name="title_message">信息</string>
+    <string name="title_qrcode">QRcode</string>
+    <string name="EmpId">請輸入員工ID</string>
+    <string name="MemId">請輸入會員ID</string>
+    <string name="Password">請輸入密碼</string>
+    <string name="Login">登入</string>
+    <string name="title_activity_main">竹風堂</string>
+    <string name="title_order">點餐</string>
+    <string name="title_serve">出餐</string>
+    <string name="title_delivery">外送</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_order_confirm">OrderConfirmActivity</string>
+    <string name="DeskNum">桌位01</string>
+    <string name="TotalAmount">$100</string>
+    <string name="Cancel">取消</string>
+    <string name="Ok">確認</string>
+    <string name="modify">修改</string>
+    <string name="submit">送出</string>
+    <string name="search">查詢</string>
+    <string name="menu_classic">經典餐點</string>
+    <string name="menu_custom">客製化餐點</string>
+    <string name="menu_popular">人氣餐點</string>
+    <string name="msg_NoNetwork">No network connection available</string>
+    <string name="msg_MenusNotFound">Menus not found</string>
+    <string name="msg_DeliveryNotFound">Delivery not found</string>
+    <string name="msg_DeskNotFound">餐點均已出餐!</string>
+    <string name="msg_GoogleApiClientConnectionFailed">GoogleApiClient connection failed</string>
+    <string name="msg_GoogleApiClientConnectionSuspended">GoogleApiClient connection suspended</string>
+    <string name="msg_LocationNotAvailable">Location is not available</string>
+    <string name="msg_LastLocationNotAvailable">The last location is not available, please wait for a while</string>
+    <string name="msg_FailCreateOrder">Fail to create the order</string>
+    <string name="text_ShouldGrant">Permission to access location should be granted</string>
+    <string-array name="deliverySearch_array">
+        <item>員工編號</item>
+        <item>派送單編號</item>
+    </string-array>
 </resources>

@@ -59,12 +59,13 @@ public class LoginActivity extends AppCompatActivity {
         memVO = isMember(mem_Id, mem_Pw);
         if (memVO.isMem()) {
 
-            // 登入成功則記錄該會員帳號、密碼至偏好設定檔，接著轉回之前頁面
+            // 登入成功則記錄該會員帳號、密碼及會員編號至偏好設定檔，接著轉回之前頁面
             SharedPreferences preferences = getSharedPreferences(
                     Util.PREF_FILE, MODE_PRIVATE);
             preferences.edit().putBoolean("login", true)
                     .putString("mem_Id", mem_Id)
-                    .putString("mem_Pw", mem_Pw).apply();
+                    .putString("mem_Pw", mem_Pw)
+                    .putString("mem_No", memVO.getMem_No()).apply();
 
             setResult(RESULT_OK);
             finish();

@@ -33,6 +33,7 @@
     <string name="msg_NoNetwork">No network connection available</string>
     <string name="msg_MenusNotFound">Menus not found</string>
     <string name="msg_DeliveryNotFound">Delivery not found</string>
+    <string name="msg_CouponNotFound">Coupon not found</string>
     <string name="msg_DeskNotFound">餐點均已出餐!</string>
     <string name="msg_GoogleApiClientConnectionFailed">GoogleApiClient connection failed</string>
     <string name="msg_GoogleApiClientConnectionSuspended">GoogleApiClient connection suspended</string>
@@ -44,4 +45,5 @@
         <item>員工編號</item>
         <item>派送單編號</item>
     </string-array>
+    <string name="couponGuide">請詳閱優惠說明，並在點餐時按下欲使用的優惠卷出示QRCode條碼，以供服務人員掃描確認完成優惠折扣</string>
 </resources>

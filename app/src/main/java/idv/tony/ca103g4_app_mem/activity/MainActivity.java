@@ -1,5 +1,6 @@
 package idv.tony.ca103g4_app_mem.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ import idv.tony.ca103g4_app_mem.R;
 import idv.tony.ca103g4_app_mem.fragment.OrderHistoryFragment;
 import idv.tony.ca103g4_app_mem.fragment.QrcodeFragment;
 import idv.tony.ca103g4_app_mem.main.BottomNavigationViewHelper;
+import idv.tony.ca103g4_app_mem.main.LoginCheck;
 import idv.tony.ca103g4_app_mem.main.Util;
 
 public class MainActivity extends AppCompatActivity
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+            SharedPreferences preferences;
+            boolean login = false;
+
             //切換fragment畫面(首頁、訂購查詢、信息、QRcode)
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -49,16 +54,31 @@ public class MainActivity extends AppCompatActivity
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_orderHistory:
-                    fragmentTransaction.replace(R.id.frameLayout,new OrderHistoryFragment());
-                    fragmentTransaction.commit();
+                    new LoginCheck(MainActivity.this,"btnOrderHistory").loginCheck();
+                    preferences = getSharedPreferences(Util.PREF_FILE,MODE_PRIVATE);
+                    login = preferences.getBoolean("login", false);
+                    if(login) {
+                        fragmentTransaction.replace(R.id.frameLayout,new OrderHistoryFragment());
+                        fragmentTransaction.commit();
+                    }
                     return true;
                 case R.id.navigation_message:
-                    fragmentTransaction.replace(R.id.frameLayout,new MessageFragment());
-                    fragmentTransaction.commit();
+                    new LoginCheck(MainActivity.this,"btnMessage").loginCheck();
+                    preferences = getSharedPreferences(Util.PREF_FILE,MODE_PRIVATE);
+                    login = preferences.getBoolean("login", false);
+                    if(login) {
+                        fragmentTransaction.replace(R.id.frameLayout, new MessageFragment());
+                        fragmentTransaction.commit();
+                    }
                     return true;
                 case R.id.navigation_qrcode:
-                    fragmentTransaction.replace(R.id.frameLayout,new QrcodeFragment());
-                    fragmentTransaction.commit();
+                    new LoginCheck(MainActivity.this,"btnQrcode").loginCheck();
+                    preferences = getSharedPreferences(Util.PREF_FILE,MODE_PRIVATE);
+                    login = preferences.getBoolean("login", false);
+                    if(login) {
+                        fragmentTransaction.replace(R.id.frameLayout,new QrcodeFragment());
+                        fragmentTransaction.commit();
+                    }
                     return true;
             }
             return false;
@@ -175,6 +195,11 @@ public class MainActivity extends AppCompatActivity
                 .add(R.id.frameLayout,homeFragment)
                 .show(homeFragment)
                 .commit();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

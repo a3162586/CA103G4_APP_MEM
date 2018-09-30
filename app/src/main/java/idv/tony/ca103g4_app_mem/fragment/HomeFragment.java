@@ -33,6 +33,7 @@ import idv.tony.ca103g4_app_mem.activity.LoginActivity;
 import idv.tony.ca103g4_app_mem.activity.MainActivity;
 import idv.tony.ca103g4_app_mem.activity.MemInfoActivity;
 import idv.tony.ca103g4_app_mem.activity.OrderActivity;
+import idv.tony.ca103g4_app_mem.main.LoginCheck;
 import idv.tony.ca103g4_app_mem.main.Util;
 import idv.tony.ca103g4_app_mem.task.CommonTask;
 import idv.tony.ca103g4_app_mem.task.ImageTask;
@@ -103,21 +104,21 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 whichBtn = "btnOrder";
-                loginCheck();
+                new LoginCheck(getActivity(),whichBtn).loginCheck();
             }
         });
         btnMemInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 whichBtn = "btnMemInfo";
-                loginCheck();
+                new LoginCheck(getActivity(),whichBtn).loginCheck();
             }
         });
         btnBooing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                whichBtn = "btnBooing";
-                loginCheck();
+                whichBtn = "btnBooking";
+                new LoginCheck(getActivity(),whichBtn).loginCheck();
             }
         });
 
@@ -134,7 +135,7 @@ public class HomeFragment extends Fragment {
             this.menuList = menuList;
             imageSize = getResources().getDisplayMetrics().widthPixels / 4;
             // 在fragment中需先取得activity後才能調用getSystemService方法
-            layoutInflater = (LayoutInflater) getActivity().getSystemService(LAYOUT_INFLATER_SERVICE);
+            layoutInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
@@ -198,84 +199,6 @@ public class HomeFragment extends Fragment {
         // 設定MenuAdapter帶入參數menuList
         GridView gvMenuIntro = view.findViewById(R.id.gvMenuIntro);
         gvMenuIntro.setAdapter(new MenuAdapter(getActivity(),result));
-    }
-
-    public void loginCheck() {
-
-        String message = "請先登入會員";
-
-        SharedPreferences preferences = getActivity().getSharedPreferences(Util.PREF_FILE,
-                getActivity().MODE_PRIVATE);
-        boolean login = preferences.getBoolean("login", false);
-        if (login)
-            forwardActivity();
-        else {
-
-            new AlertDialog.Builder(getActivity())
-                    .setIcon(R.drawable.baboo)
-                    .setTitle(R.string.app_name)
-                    .setMessage(message)
-                    .setPositiveButton("確認",
-                            new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("whichBtn", whichBtn);
-                                    startActivityForResult(intent,LOGIN_REQUEST);
-                                }
-                            })
-
-                    .setNegativeButton("取消",
-                            new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    dialog.cancel();
-                                }
-                            }).setCancelable(false).show();
-
-        }
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //判斷請求代碼是否相同，確認來源是否正確
-        if (requestCode != LOGIN_REQUEST) {
-            return;
-        }
-
-        switch (resultCode) {
-            case Activity.RESULT_OK:
-                Toast.makeText(getActivity(), "登入成功", Toast.LENGTH_SHORT).show();
-                forwardActivity();
-                break;
-            case Activity.RESULT_CANCELED:
-                Toast.makeText(getActivity(), "取消登入", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
-    public void forwardActivity() {
-
-        Intent intent = new Intent();
-
-        switch (whichBtn) {
-            case "btnOrder":
-                intent.setClass(getActivity(), OrderActivity.class);
-                break;
-            case "btnMemInfo":
-                intent.setClass(getActivity(), MemInfoActivity.class);
-                break;
-            case "btnBooing":
-                intent.setClass(getActivity(), BookingActivity.class);
-                break;
-        }
-        startActivity(intent);
     }
 
     @Override

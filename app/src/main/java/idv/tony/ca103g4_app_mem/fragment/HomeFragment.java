@@ -1,13 +1,8 @@
 package idv.tony.ca103g4_app_mem.fragment;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +12,6 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -28,11 +22,6 @@ import java.util.List;
 
 import idv.tony.ca103g4_app_mem.MenuVO;
 import idv.tony.ca103g4_app_mem.R;
-import idv.tony.ca103g4_app_mem.activity.BookingActivity;
-import idv.tony.ca103g4_app_mem.activity.LoginActivity;
-import idv.tony.ca103g4_app_mem.activity.MainActivity;
-import idv.tony.ca103g4_app_mem.activity.MemInfoActivity;
-import idv.tony.ca103g4_app_mem.activity.OrderActivity;
 import idv.tony.ca103g4_app_mem.main.LoginCheck;
 import idv.tony.ca103g4_app_mem.main.Util;
 import idv.tony.ca103g4_app_mem.task.CommonTask;

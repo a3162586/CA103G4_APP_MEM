@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="80dp"
     android:orientation="horizontal"
     android:layout_margin="5dp"
     card_view:cardBackgroundColor="@color/colorLightYellow"
@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/ivCoupon_Photo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:scaleType="fitXY"
             android:background="@color/colorWhite"
             android:src="@drawable/nopicture"/>
@@ -37,14 +37,16 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/ivCoupon_Photo"
             android:paddingLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_alignParentBottom="true"
-            android:text="使用期限"
+            android:text="使用期限:"
             android:textColor="@color/colorBlack"/>
         <TextView
             android:id="@+id/tvCoupon_Discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="10dp"
+            android:layout_marginTop="20dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:text="折扣"

@@ -1,6 +1,7 @@
 package idv.tony.ca103g4_app_mem.fragment;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,20 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
-import idv.tony.ca103g4_app_mem.CouponhistoryVO;
-import idv.tony.ca103g4_app_mem.MenuVO;
+import idv.tony.ca103g4_app_mem.CouponVO;
 import idv.tony.ca103g4_app_mem.R;
 import idv.tony.ca103g4_app_mem.main.Util;
 import idv.tony.ca103g4_app_mem.task.CommonTask;
@@ -36,7 +35,8 @@ public class QrcodeCouponFragment extends Fragment {
     private View view;
     private CommonTask getCouponTask;
     private ImageTask menuImageTask;
-    private List<CouponhistoryVO> couponList;
+    private List<CouponVO> couponList;
+    private Gson gson;
 //    private List<CouponhistoryVO> couponList = new ArrayList<>();
 
     public QrcodeCouponFragment() {
@@ -47,22 +47,30 @@ public class QrcodeCouponFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_qrcode_coupon, container, false);
 
+        // 優惠卷資料欄位帶有日期時間，最好指定轉換成JSON時的格式
+        gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+
+        SharedPreferences preferences = getActivity().getSharedPreferences(Util.PREF_FILE,
+                getActivity().MODE_PRIVATE);
+        String mem_No = preferences.getString("mem_No", "");
+
         // check if the device connect to the network
         if (Util.networkConnected(getActivity())) {
 
             //宣告JasonObject物件，利用getCouponTask非同步任務連線到Servlet的 if ("getAll".equals(action))
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
+            jsonObject.addProperty("action", "getCouponByMemNo");
+            jsonObject.addProperty("mem_No", mem_No);
             String jsonOut = jsonObject.toString();
             getCouponTask = new CommonTask(Util.URL + "AndroidCouponhistoryServlet", jsonOut);
 
             try {
 
-                //將getCouponTask回傳的result重新轉型回List<CouponhistoryVO>物件
+                //將getCouponTask回傳的result重新轉型回List<CouponVO>物件
                 String jsonIn = getCouponTask.execute().get();
-                Type listType = new TypeToken<List<CouponhistoryVO>>() {
+                Type listType = new TypeToken<List<CouponVO>>() {
                 }.getType();
-                couponList = new Gson().fromJson(jsonIn, listType);
+                couponList = gson.fromJson(jsonIn, listType);
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
@@ -81,10 +89,10 @@ public class QrcodeCouponFragment extends Fragment {
 
     private class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder> {
 
-        private List<CouponhistoryVO> couponList;
+        private List<CouponVO> couponList;
         private int imageSize;
 
-        public CouponAdapter(List<CouponhistoryVO> couponList) {
+        public CouponAdapter(List<CouponVO> couponList) {
             this.couponList = couponList;
             imageSize = getResources().getDisplayMetrics().widthPixels / 4;
         }
@@ -112,14 +120,19 @@ public class QrcodeCouponFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-            final CouponhistoryVO coupon = couponList.get(position);
-            holder.tvCoupon_Name.setText(coupon.getMem_no());
-            holder.tvCoupon_Period.setText(coupon.getOrder_no());
-            holder.tvCoupon_Discount.setText("");
+            final CouponVO coupon = couponList.get(position);
+            holder.tvCoupon_Name.setText(coupon.getCoucatVO().getCoucat_Name());
+
+            java.text.SimpleDateFormat sdf1 = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            String Valid = sdf1.format(coupon.getCoucatVO().getCoucat_Valid());
+            String Invalid = sdf1.format(coupon.getCoucatVO().getCoucat_Invalid());
+
+            holder.tvCoupon_Period.setText("使用期限 : \n"+Valid+" ~ "+Invalid);
+            holder.tvCoupon_Discount.setText("折扣$"+Integer.toString(coupon.getCoucatVO().getCoucat_Value()));
 
             //menuImageTask傳入ViewHolder物件，處理完之後會直接將圖show在對應的view上
-            String url = Util.URL + "AndroidCouponhistoryServlet";
-            String pk = coupon.getCoup_sn();
+            String url = Util.URL + "AndroidCoucatServlet";
+            String pk = coupon.getCoucatVO().getCoucat_No();
             menuImageTask = new ImageTask(url, pk, imageSize, holder.ivCoupon_Photo);
             menuImageTask.execute();
 
@@ -131,7 +144,7 @@ public class QrcodeCouponFragment extends Fragment {
         }
     }
 
-    public void showResult(List<CouponhistoryVO> result) {
+    public void showResult(List<CouponVO> result) {
 
         rvCouponDetail = view.findViewById(R.id.rvCouponDetail);
         rvCouponDetail.setHasFixedSize(true);

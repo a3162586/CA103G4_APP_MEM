@@ -12,7 +12,7 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorLightYellow"
+            android:background="@color/colorGray"
             app:tabTextColor="@color/colorBlack"
             app:tabMaxWidth="0dp"
             app:tabGravity="fill"

@@ -25,7 +25,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.OrderActivity" />
         <activity android:name=".activity.MemInfoActivity" />
-        <activity android:name=".activity.BookingActivity"></activity>
+        <activity android:name=".activity.BookingActivity" />
     </application>
 
 </manifest>

@@ -6,22 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.Toast;
 
 import idv.tony.ca103g4_app_mem.R;
 import idv.tony.ca103g4_app_mem.activity.BookingActivity;
 import idv.tony.ca103g4_app_mem.activity.LoginActivity;
 import idv.tony.ca103g4_app_mem.activity.MemInfoActivity;
 import idv.tony.ca103g4_app_mem.activity.OrderActivity;
-import idv.tony.ca103g4_app_mem.fragment.HomeFragment;
-import idv.tony.ca103g4_app_mem.fragment.QrcodeFragment;
 
-public class LoginCheck extends AppCompatActivity{
+public class LoginCheck {
 
     private final int LOGIN_REQUEST = 0;
     private Activity activity;
@@ -59,6 +52,7 @@ public class LoginCheck extends AppCompatActivity{
                                     Intent intent = new Intent(activity, LoginActivity.class);
                                     Bundle bundle = new Bundle();
                                     bundle.putString("whichBtn", whichBtn);
+                                    intent.putExtras(bundle);
                                     activity.startActivityForResult(intent,LOGIN_REQUEST);
                                 }
                             })
@@ -75,26 +69,6 @@ public class LoginCheck extends AppCompatActivity{
 
         }
 
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-        //判斷請求代碼是否相同，確認來源是否正確
-        if (requestCode != LOGIN_REQUEST) {
-            return;
-        }
-
-        switch (resultCode) {
-            case Activity.RESULT_OK:
-                Toast.makeText(activity, "登入成功", Toast.LENGTH_SHORT).show();
-                forwardActivity();
-                break;
-            case Activity.RESULT_CANCELED:
-                Toast.makeText(activity, "取消登入", Toast.LENGTH_SHORT).show();
-                break;
-        }
     }
 
     public void forwardActivity() {

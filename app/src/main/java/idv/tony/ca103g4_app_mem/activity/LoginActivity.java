@@ -23,6 +23,7 @@ import idv.tony.ca103g4_app_mem.task.CommonTask;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private final int LOGIN_REQUEST = 0;
     private EditText etMemId,etPassword;
     private CommonTask isMemberTask;
     private MemberVO memVO;
@@ -67,7 +68,12 @@ public class LoginActivity extends AppCompatActivity {
                     .putString("mem_Pw", mem_Pw)
                     .putString("mem_No", memVO.getMem_No()).apply();
 
-            setResult(RESULT_OK);
+            Intent intent = this.getIntent();
+            Bundle bundle = intent.getExtras();
+            bundle.getString("whichBtn");
+            intent.putExtras(bundle);
+
+            setResult(RESULT_OK,intent);
             finish();
 
         } else {

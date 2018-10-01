@@ -1,5 +1,6 @@
 package idv.tony.ca103g4_app_mem.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,26 +8,26 @@ import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import idv.tony.ca103g4_app_mem.fragment.MessageFragment;
-import idv.tony.ca103g4_app_mem.fragment.HomeFragment;
 import idv.tony.ca103g4_app_mem.R;
+import idv.tony.ca103g4_app_mem.fragment.HomeFragment;
+import idv.tony.ca103g4_app_mem.fragment.MessageFragment;
 import idv.tony.ca103g4_app_mem.fragment.OrderHistoryFragment;
 import idv.tony.ca103g4_app_mem.fragment.QrcodeFragment;
 import idv.tony.ca103g4_app_mem.main.BottomNavigationViewHelper;
@@ -35,6 +36,12 @@ import idv.tony.ca103g4_app_mem.main.Util;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final int LOGIN_REQUEST = 0;
+    private boolean change_fragment = false;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+    String whichBtn;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -46,8 +53,8 @@ public class MainActivity extends AppCompatActivity
             boolean login = false;
 
             //切換fragment畫面(首頁、訂購查詢、信息、QRcode)
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     fragmentTransaction.replace(R.id.frameLayout,new HomeFragment());
@@ -199,7 +206,73 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
+        //判斷請求代碼是否相同，確認來源是否正確
+        if (requestCode != LOGIN_REQUEST) {
+            return;
+        }
+
+        switch (resultCode) {
+            case Activity.RESULT_OK:
+                Toast.makeText(this, "登入成功", Toast.LENGTH_SHORT).show();
+                Bundle bundle = data.getExtras();
+                whichBtn = bundle.getString("whichBtn");
+                forwardActivity();
+                break;
+            case Activity.RESULT_CANCELED:
+                Toast.makeText(this, "取消登入", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    public void forwardActivity() {
+
+        Intent intent = new Intent();
+
+        switch (whichBtn) {
+            case "btnOrder":
+                intent.setClass(this, OrderActivity.class);
+                break;
+            case "btnMemInfo":
+                intent.setClass(this, MemInfoActivity.class);
+                break;
+            case "btnBooking":
+                intent.setClass(this, BookingActivity.class);
+                break;
+            case "btnOrderHistory":
+                change_fragment = true;
+                return;
+            case "btnMessage":
+                change_fragment = true;
+                return;
+            case "btnQrcode":
+                change_fragment = true;
+                return;
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(change_fragment) {
+
+            change_fragment=false;
+            switch (whichBtn) {
+                case "btnOrderHistory":
+                    fragmentTransaction.replace(R.id.frameLayout,new OrderHistoryFragment());
+                    fragmentTransaction.commit();
+                    break;
+                case "btnMessage":
+                    fragmentTransaction.replace(R.id.frameLayout, new MessageFragment());
+                    fragmentTransaction.commit();
+                    break;
+                case "btnQrcode":
+                    fragmentTransaction.replace(R.id.frameLayout,new QrcodeFragment());
+                    fragmentTransaction.commit();
+                    break;
+            }
+        }
     }
 
     @Override

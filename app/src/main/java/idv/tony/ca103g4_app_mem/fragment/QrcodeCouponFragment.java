@@ -2,28 +2,36 @@ package idv.tony.ca103g4_app_mem.fragment;
 
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
 import idv.tony.ca103g4_app_mem.CouponVO;
 import idv.tony.ca103g4_app_mem.R;
+import idv.tony.ca103g4_app_mem.main.Contents;
+import idv.tony.ca103g4_app_mem.main.QRCodeEncoder;
 import idv.tony.ca103g4_app_mem.main.Util;
 import idv.tony.ca103g4_app_mem.task.CommonTask;
 import idv.tony.ca103g4_app_mem.task.ImageTask;
@@ -37,7 +45,6 @@ public class QrcodeCouponFragment extends Fragment {
     private ImageTask menuImageTask;
     private List<CouponVO> couponList;
     private Gson gson;
-//    private List<CouponhistoryVO> couponList = new ArrayList<>();
 
     public QrcodeCouponFragment() {
     }
@@ -107,6 +114,16 @@ public class QrcodeCouponFragment extends Fragment {
                 tvCoupon_Name = view.findViewById(R.id.tvCoupon_Name);
                 tvCoupon_Period = view.findViewById(R.id.tvCoupon_Period);
                 tvCoupon_Discount = view.findViewById(R.id.tvCoupon_Discount);
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getActivity(),
+                                couponList.get(getAdapterPosition()).getCoup_Sn(),Toast.LENGTH_SHORT).show();
+                        qrcodeGenerate(couponList.get(getAdapterPosition()).getCoup_Sn());
+
+                    }
+                });
             }
         }
 
@@ -151,6 +168,48 @@ public class QrcodeCouponFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvCouponDetail.setLayoutManager(layoutManager);
         rvCouponDetail.setAdapter(new CouponAdapter(result));
+
+    }
+
+    private int getDimension() {
+        WindowManager manager = (WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE);
+        // 取得螢幕尺寸
+        Display display = manager.getDefaultDisplay();
+        // API 13列為deprecated，但為了支援舊版手機仍採用
+        int width = display.getWidth();
+        int height = display.getHeight();
+
+        // 產生的QR code圖形尺寸(正方形)為螢幕較短一邊的1/2長度
+        int smallerDimension = width < height ? width : height;
+        smallerDimension = smallerDimension / 2;
+
+        // API 13開始支援
+//                Display display = manager.getDefaultDisplay();
+//                Point point = new Point();
+//                display.getSize(point);
+//                int width = point.x;
+//                int height = point.y;
+//                int smallerDimension = width < height ? width : height;
+//                smallerDimension = smallerDimension / 2;
+        return smallerDimension;
+    }
+
+    private void qrcodeGenerate(String qrCodeText) {
+
+        int smallerDimension = getDimension();
+
+        Log.e(TAG, qrCodeText);
+
+        // Encode with a QR Code image
+        QRCodeEncoder qrCodeEncoder = new QRCodeEncoder(qrCodeText, null,
+                Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(),
+                smallerDimension);
+        try {
+            Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
+//            ivCode.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 
     }
 

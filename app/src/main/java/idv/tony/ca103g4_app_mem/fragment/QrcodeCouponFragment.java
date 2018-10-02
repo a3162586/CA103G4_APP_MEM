@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,6 +44,8 @@ public class QrcodeCouponFragment extends Fragment {
     private ImageTask menuImageTask;
     private List<CouponVO> couponList;
     private Gson gson;
+    private ImageView ivCode;
+    private TextView tvCoupSn;
 
     public QrcodeCouponFragment() {
     }
@@ -53,6 +54,9 @@ public class QrcodeCouponFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_qrcode_coupon, container, false);
+
+        ivCode = view.findViewById(R.id.ivCode);
+        tvCoupSn = view.findViewById(R.id.tvCoupSn);
 
         // 優惠卷資料欄位帶有日期時間，最好指定轉換成JSON時的格式
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -118,10 +122,10 @@ public class QrcodeCouponFragment extends Fragment {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getActivity(),
-                                couponList.get(getAdapterPosition()).getCoup_Sn(),Toast.LENGTH_SHORT).show();
-                        qrcodeGenerate(couponList.get(getAdapterPosition()).getCoup_Sn());
 
+                        String coupSn = couponList.get(getAdapterPosition()).getCoup_Sn();
+                        tvCoupSn.setText("優惠卷序號 : "+coupSn);
+                        qrcodeGenerate(coupSn);
                     }
                 });
             }
@@ -206,7 +210,7 @@ public class QrcodeCouponFragment extends Fragment {
                 smallerDimension);
         try {
             Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
-//            ivCode.setImageBitmap(bitmap);
+            ivCode.setImageBitmap(bitmap);
         } catch (WriterException e) {
             e.printStackTrace();
         }

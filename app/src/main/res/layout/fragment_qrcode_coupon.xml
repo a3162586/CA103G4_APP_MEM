@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:textSize="16sp"
             android:textColor="@color/colorBlack"
             android:layout_gravity="center"
             android:text="@string/couponGuide"/>
@@ -23,9 +22,24 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvCouponDetail"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="15dp"
+            android:layout_height="150dp"
             android:scrollbars="vertical"/>
+
+        <TextView
+            android:id="@+id/tvCoupSn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/colorBlack"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="優惠卷QRCode"/>
+
+        <ImageView
+            android:id="@+id/ivCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 

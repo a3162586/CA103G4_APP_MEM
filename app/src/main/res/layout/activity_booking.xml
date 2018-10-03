@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.BookingActivity">
 
     <ImageView
@@ -11,6 +12,177 @@
         android:layout_height="150dp"
         android:background="@drawable/ad_06"/>
 
+    <TextView
+        android:text="選擇用餐日期及人數:"
+        android:textColor="@color/colorRed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightYellow">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_home_black_24dp"/>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:text="選擇店點"
+            android:textColor="@color/colorBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_toRightOf="@+id/imageView1"
+            android:gravity="center"/>
+
+        <Spinner
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true">
+
+        </Spinner>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorGray2">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_event_available_black_24dp"/>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:text="用餐日期"
+            android:textColor="@color/colorBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_toRightOf="@+id/imageView2"
+            android:gravity="center"/>
+
+        <Spinner
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true">
+
+        </Spinner>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightYellow">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_person_black_24dp"/>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:text="用餐人數"
+            android:textColor="@color/colorBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_toRightOf="@+id/imageView3"
+            android:gravity="center"/>
+
+        <Spinner
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true">
+
+        </Spinner>
+
+    </RelativeLayout>
+
+    <TextView
+        android:text="選擇用餐時間:"
+        android:textColor="@color/colorRed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:text="10 : 30"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"/>
+        <Button
+            android:text="12 : 00"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"/>
+        <Button
+            android:text="13 : 30"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"/>
+        <Button
+            android:text="15 : 00"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:text="16 : 30"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"/>
+        <Button
+            android:text="17 : 00"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"/>
+        <Button
+            android:text="19 : 30"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"/>
+        <Button
+            android:text="21 : 00"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"/>
+
+    </LinearLayout>
 
 
-</RelativeLayout>
+
+    <TextView
+        android:text="訂位注意事項"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/textview_border"
+        android:layout_margin="15dp"
+        android:padding="5dp"/>
+
+
+
+</LinearLayout>

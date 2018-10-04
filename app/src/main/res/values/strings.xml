@@ -34,6 +34,7 @@
     <string name="msg_MenusNotFound">Menus not found</string>
     <string name="msg_DeliveryNotFound">Delivery not found</string>
     <string name="msg_CouponNotFound">Coupon not found</string>
+    <string name="msg_BranchNotFound">Branch not found</string>
     <string name="msg_DeskNotFound">餐點均已出餐!</string>
     <string name="msg_GoogleApiClientConnectionFailed">GoogleApiClient connection failed</string>
     <string name="msg_GoogleApiClientConnectionSuspended">GoogleApiClient connection suspended</string>
@@ -41,6 +42,18 @@
     <string name="msg_LastLocationNotAvailable">The last location is not available, please wait for a while</string>
     <string name="msg_FailCreateOrder">Fail to create the order</string>
     <string name="text_ShouldGrant">Permission to access location should be granted</string>
+    <string-array name="diningPeople_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
     <string-array name="deliverySearch_array">
         <item>員工編號</item>
         <item>派送單編號</item>

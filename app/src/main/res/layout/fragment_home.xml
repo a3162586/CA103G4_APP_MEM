@@ -70,7 +70,6 @@
                 android:layout_marginRight="20dp"
                 android:src="@drawable/sign_restaurant"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:contentDescription="test"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
                 tools:targetApi="lollipop" />
@@ -83,7 +82,6 @@
                 android:layout_marginRight="20dp"
                 android:src="@drawable/members"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:contentDescription="test"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
                 tools:targetApi="lollipop" />
@@ -96,7 +94,6 @@
                 android:layout_marginRight="20dp"
                 android:src="@drawable/overtime_rate"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:contentDescription="test"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
                 tools:targetApi="lollipop" />

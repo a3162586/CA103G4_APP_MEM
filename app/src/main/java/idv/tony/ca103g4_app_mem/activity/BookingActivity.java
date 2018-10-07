@@ -2,11 +2,13 @@ package idv.tony.ca103g4_app_mem.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +46,7 @@ public class BookingActivity extends AppCompatActivity {
     private static int year, month, day;
     private CommonTask getBranchTask;
     private List<BranchVO> branchList = null;
+    private static String branchName,diningDate,diningPeople,diningTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +133,7 @@ public class BookingActivity extends AppCompatActivity {
                 SharedPreferences preferences = getSharedPreferences(
                         Util.PREF_FILE, MODE_PRIVATE);
                 preferences.edit().putString("branch_No", branch_No).apply();
+                branchName = branchList.get(i).getBranch_Name();
             }
 
             @Override
@@ -148,7 +152,7 @@ public class BookingActivity extends AppCompatActivity {
         spDiningPeople.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(BookingActivity.this, Integer.toString(i+1), Toast.LENGTH_SHORT).show();
+                diningPeople = Integer.toString(i+1);
             }
 
             @Override
@@ -161,16 +165,42 @@ public class BookingActivity extends AppCompatActivity {
     private Button.OnClickListener myListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-//            switch (v.getId()) {
-//                case R.id.button1:
-//
-//                    break;
-//            }
-            Intent intent = new Intent(BookingActivity.this,chooseTableActivity.class);
-            Bundle bundle = new Bundle();
-            intent.putExtras(bundle);
-            startActivity(intent);
 
+            Button btn = v.findViewById(v.getId());
+            diningTime = btn.getText().toString();
+            String message = "該時段還可接受訂位，\n請點選 \"確認\" 選擇預訂座位。";
+
+            new AlertDialog.Builder(BookingActivity.this)
+                    .setIcon(R.drawable.baboo)
+                    .setTitle(R.string.app_name)
+                    .setMessage(message)
+                    .setPositiveButton("確認",
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+
+                                    Intent intent = new Intent(BookingActivity.this,chooseTableActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("branchName",branchName);
+                                    bundle.putString("diningDate",diningDate);
+                                    bundle.putString("diningPeople",diningPeople);
+                                    bundle.putString("diningTime",diningTime);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                }
+                            })
+
+                    .setNegativeButton("修改",
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    dialog.cancel();
+                                }
+                            }).setCancelable(false).show();
         }
     };
 
@@ -214,6 +244,7 @@ public class BookingActivity extends AppCompatActivity {
         tvDiningDate.setText(new StringBuilder().append(year).append("/")
                 //「month + 1」是因為一月的值是0而非1
                 .append(parseNum(month + 1)).append("/").append(parseNum(day)));
+        diningDate = tvDiningDate.getText().toString();
     }
 
     // 若數字有十位數，直接顯示；若只有個位數則補0後再顯示。例如7會改成07後再顯示

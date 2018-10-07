@@ -1,8 +1,10 @@
 package idv.tony.ca103g4_app_mem.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +16,10 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,6 +32,8 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,9 +41,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
 
 import idv.tony.ca103g4_app_mem.DeskVO;
 import idv.tony.ca103g4_app_mem.R;
+import idv.tony.ca103g4_app_mem.ResVO;
 import idv.tony.ca103g4_app_mem.main.Util;
 import idv.tony.ca103g4_app_mem.task.CommonTask;
 
@@ -49,9 +61,12 @@ public class chooseTableActivity extends AppCompatActivity {
     private MyWebSocketClient myWebSocketClient;
     private URI uri;
     private List<DeskVO> deskList;
-    private CommonTask getDeskTask;
-    private String branch_no,mem_No;
+    private CommonTask getDeskTask,reservationAddTask;
+    private String branch_no,mem_No,branchName,diningDate,diningPeople,diningTime;
     private Map<String,Integer> seatStatus = new TreeMap<>();
+    private Gson gson;
+    private StringBuilder seatStr;
+    private TextView tvPeople;
 
     private class MyWebSocketClient extends WebSocketClient {
 
@@ -77,6 +92,11 @@ public class chooseTableActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onMessage(ByteBuffer bytes) {
+            super.onMessage(bytes);
+        }
+
+        @Override
         public void onMessage(final String message) {
             Log.d(TAG, "onMessage: " + message);
             runOnUiThread(new Runnable() {
@@ -88,7 +108,7 @@ public class chooseTableActivity extends AppCompatActivity {
                         String mem_no = jsonObject.get("mem_no").toString();
 
                         if(!mem_no.equals(mem_No)) {
-Log.e(TAG,"1");
+
                             if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
                                 seatStatus.put(seat,2);
@@ -134,10 +154,21 @@ Log.e(TAG,"1");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_table);
 
+        // 訂位紀錄資料欄位帶有日期時間，最好指定轉換成JSON時的格式
+        gson = new GsonBuilder().setDateFormat("yyyy/MM/dd HH:mm:ss").create();
+
         SharedPreferences preferences = getSharedPreferences(Util.PREF_FILE,
                 MODE_PRIVATE);
         branch_no = preferences.getString("branch_No", "");
         mem_No = preferences.getString("mem_No","");
+        Bundle bundle = getIntent().getExtras();
+        branchName = bundle.getString("branchName");
+        diningDate = bundle.getString("diningDate");
+        diningPeople = bundle.getString("diningPeople");
+        diningTime = bundle.getString("diningTime");
+
+        tvPeople = findViewById(R.id.tvPeople);
+        tvPeople.setText(diningPeople);
 
         try {
             uri = new URI(SERVER_URI + mem_No);
@@ -258,9 +289,16 @@ Log.e(TAG,"1");
                 @Override
                 public void onClick(View view) {
 
+
                     String seat = region.substring(1,2)+Integer.toString(finalSeatPosition);
 
                     if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
+
+                        if("0".equals(tvPeople.getText().toString()))
+                            return;
+                        else {
+                            tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())-1));
+                        }
 
                         seatStatus.put(seat,1);
                         holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
@@ -272,6 +310,8 @@ Log.e(TAG,"1");
                         Log.d(TAG, "output: " + jsonObject.toString());
 
                     } else if(seatStatus.get(seat) == 1) {
+
+                        tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())+1));
 
                         seatStatus.put(seat,3);
                         holder.ivTableImg1.setBackgroundResource(0);
@@ -294,6 +334,12 @@ Log.e(TAG,"1");
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
+                            if("0".equals(tvPeople.getText().toString()))
+                                return;
+                            else {
+                                tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())-1));
+                            }
+
                             seatStatus.put(seat,1);
                             holder.ivTableImg2.setBackgroundResource(R.color.colorRed);
                             JsonObject jsonObject = new JsonObject();
@@ -304,6 +350,8 @@ Log.e(TAG,"1");
                             Log.d(TAG, "output: " + jsonObject.toString());
 
                         } else if(seatStatus.get(seat) == 1) {
+
+                            tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())+1));
 
                             seatStatus.put(seat,3);
                             holder.ivTableImg2.setBackgroundResource(0);
@@ -327,6 +375,12 @@ Log.e(TAG,"1");
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
+                            if("0".equals(tvPeople.getText().toString()))
+                                return;
+                            else {
+                                tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())-1));
+                            }
+
                             seatStatus.put(seat,1);
                             holder.ivTableImg3.setBackgroundResource(R.color.colorRed);
                             JsonObject jsonObject = new JsonObject();
@@ -337,6 +391,8 @@ Log.e(TAG,"1");
                             Log.d(TAG, "output: " + jsonObject.toString());
 
                         } else if(seatStatus.get(seat) == 1) {
+
+                            tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())+1));
 
                             seatStatus.put(seat,3);
                             holder.ivTableImg3.setBackgroundResource(0);
@@ -358,6 +414,12 @@ Log.e(TAG,"1");
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
+                            if("0".equals(tvPeople.getText().toString()))
+                                return;
+                            else {
+                                tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())-1));
+                            }
+
                             seatStatus.put(seat,1);
                             holder.ivTableImg4.setBackgroundResource(R.color.colorRed);
                             JsonObject jsonObject = new JsonObject();
@@ -368,6 +430,8 @@ Log.e(TAG,"1");
                             Log.d(TAG, "output: " + jsonObject.toString());
 
                         } else if(seatStatus.get(seat) == 1) {
+
+                            tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())+1));
 
                             seatStatus.put(seat,3);
                             holder.ivTableImg4.setBackgroundResource(0);
@@ -391,6 +455,12 @@ Log.e(TAG,"1");
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
+                            if("0".equals(tvPeople.getText().toString()))
+                                return;
+                            else {
+                                tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())-1));
+                            }
+
                             seatStatus.put(seat,1);
                             holder.ivTableImg5.setBackgroundResource(R.color.colorRed);
                             JsonObject jsonObject = new JsonObject();
@@ -401,6 +471,8 @@ Log.e(TAG,"1");
                             Log.d(TAG, "output: " + jsonObject.toString());
 
                         } else if(seatStatus.get(seat) == 1) {
+
+                            tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())+1));
 
                             seatStatus.put(seat,3);
                             holder.ivTableImg5.setBackgroundResource(0);
@@ -422,6 +494,12 @@ Log.e(TAG,"1");
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
+                            if("0".equals(tvPeople.getText().toString()))
+                                return;
+                            else {
+                                tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())-1));
+                            }
+
                             seatStatus.put(seat,1);
                             holder.ivTableImg6.setBackgroundResource(R.color.colorRed);
                             JsonObject jsonObject = new JsonObject();
@@ -432,6 +510,8 @@ Log.e(TAG,"1");
                             Log.d(TAG, "output: " + jsonObject.toString());
 
                         } else if(seatStatus.get(seat) == 1) {
+
+                            tvPeople.setText(Integer.toString(Integer.parseInt(tvPeople.getText().toString())+1));
 
                             seatStatus.put(seat,3);
                             holder.ivTableImg6.setBackgroundResource(0);
@@ -578,6 +658,127 @@ Log.e(TAG,"1");
         GridView gdTableD = findViewById(R.id.gvTableD);
         gdTableD.setAdapter(new TableAdapter(this,deskList,"0D"));
 
+    }
+
+    public void onBookingClick(View view) {
+        seatStr = new StringBuilder();
+        StringBuilder bookingCheckStr = new StringBuilder();
+        bookingCheckStr
+                .append("請確認訂位資料是否正確\n\n")
+                .append("分店名稱 : ").append(branchName).append("\n")
+                .append("訂位日期 : ").append(diningDate).append("\n")
+                .append("用餐人數 : ").append(diningPeople).append("\n")
+                .append("訂位時間 : ").append(diningTime).append("\n")
+                .append("-預訂座位-\n");
+
+        Set set = seatStatus.keySet();
+        Iterator it = set.iterator();
+        while(it.hasNext()) {
+            Object myKey = it.next();
+            if(seatStatus.get(myKey) == 1) {
+                bookingCheckStr.append(myKey.toString()).append(":");
+                seatStr.append(myKey.toString()).append(":");
+            }
+        }
+
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.baboo)
+                .setTitle(R.string.app_name)
+                .setMessage(bookingCheckStr)
+                .setPositiveButton("確認",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+
+                                if (Util.networkConnected(chooseTableActivity.this)) {
+                                    String url = Util.URL + "AndroidReservationServlet";
+
+                                    ResVO res = new ResVO();
+                                    res.setMem_no(mem_No);
+                                    res.setRes_submit(new Timestamp(System.currentTimeMillis()));
+                                    res.setRes_timebg(stringToTimestamp(diningDate+" "+diningTime));
+                                    long timefn = stringToTimeInMillis(diningDate+" "+diningTime);
+                                    timefn+=5400000;
+                                    res.setRes_timefn(timeInMillisToTimestamp(timefn));
+                                    res.setRes_people(Integer.parseInt(diningPeople));
+                                    res.setRes_status(1);
+
+                                    // 宣告JasonObject物件，利用reservationAddTask非同步任務連線到Servlet的 if ("add".equals(action))
+                                    String resStr = gson.toJson(res);
+                                    JsonObject jsonObject = new JsonObject();
+                                    jsonObject.addProperty("action", "add");
+                                    jsonObject.addProperty("reservation", resStr);
+                                    jsonObject.addProperty("branch_no", branch_no);
+                                    jsonObject.addProperty("seatStr", seatStr.toString());
+                                    String jsonOut = jsonObject.toString();
+                                    reservationAddTask = new CommonTask(url, jsonOut);
+
+                                    // 訂位紀錄新增成功會轉換至MainActivity頁面，失敗則show出FailCreateOrder訊息
+                                    ResVO successRes = null;
+                                    try {
+
+                                        // 回傳的Json字串以ResVO格式解析
+                                        String result = reservationAddTask.execute().get();
+                                        successRes = gson.fromJson(result, ResVO.class);
+                                    } catch (Exception e) {
+                                        Log.e(TAG, e.toString());
+                                    }
+
+                                    if (successRes == null) {
+                                        Util.showToast(chooseTableActivity.this, R.string.msg_FailCreateRes);
+                                    } else {
+                                        Toast.makeText(chooseTableActivity.this, "訂位成功!", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(chooseTableActivity.this, MainActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                    }
+                                }
+
+
+                            }
+                        })
+
+                .setNegativeButton("修改",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                dialog.cancel();
+                            }
+                        }).setCancelable(false).show();
+
+    }
+
+    public Timestamp stringToTimestamp(String dateStr) {
+        DateFormat formatter ;
+        Date date = new Date();
+        formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        try {
+            date = formatter.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Timestamp timeStampDate = new Timestamp(date.getTime());
+        return timeStampDate;
+    }
+
+    public long stringToTimeInMillis(String dateStr) {
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(new SimpleDateFormat("yyyy/MM/dd HH:mm").parse(dateStr));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return calendar.getTimeInMillis();
+    }
+
+    public Timestamp timeInMillisToTimestamp(long millis) {
+
+        return new Timestamp(millis);
     }
 
     @Override

@@ -2,6 +2,8 @@ package idv.tony.ca103g4_app_mem.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -124,7 +126,10 @@ public class BookingActivity extends AppCompatActivity {
         spBranch.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                String branch_No = branchList.get(i).getBranch_No();
+                SharedPreferences preferences = getSharedPreferences(
+                        Util.PREF_FILE, MODE_PRIVATE);
+                preferences.edit().putString("branch_No", branch_No).apply();
             }
 
             @Override
@@ -161,7 +166,10 @@ public class BookingActivity extends AppCompatActivity {
 //
 //                    break;
 //            }
-            Toast.makeText(BookingActivity.this, "test", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(BookingActivity.this,chooseTableActivity.class);
+            Bundle bundle = new Bundle();
+            intent.putExtras(bundle);
+            startActivity(intent);
 
         }
     };

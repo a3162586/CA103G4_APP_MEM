@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,20 +32,19 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Calendar;
 
 import idv.tony.ca103g4_app_mem.DeskVO;
 import idv.tony.ca103g4_app_mem.R;
@@ -56,8 +55,8 @@ import idv.tony.ca103g4_app_mem.task.CommonTask;
 public class chooseTableActivity extends AppCompatActivity {
 
     private final static String TAG = "chooseTableActivity";
-    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/AndroidMyBookingServer/";
-//    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/AndroidMyBookingServer/";
+//    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/AndroidMyBookingServer/";
+    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/AndroidMyBookingServer/";
     private MyWebSocketClient myWebSocketClient;
     private URI uri;
     private List<DeskVO> deskList;
@@ -91,10 +90,7 @@ public class chooseTableActivity extends AppCompatActivity {
             Log.d(TAG, text);
         }
 
-        @Override
-        public void onMessage(ByteBuffer bytes) {
-            super.onMessage(bytes);
-        }
+
 
         @Override
         public void onMessage(final String message) {
@@ -103,23 +99,51 @@ public class chooseTableActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        JSONObject jsonObject = new JSONObject(message);
-                        String seat = jsonObject.get("seat").toString();
-                        String mem_no = jsonObject.get("mem_no").toString();
 
-                        if(!mem_no.equals(mem_No)) {
+                        Log.e("xxxxxxxx",message);
+                        if(message.isEmpty())
+                            return;
+                        else if("{".equals(message.substring(0,1))) {
 
-                            if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
+                            JSONObject jsonObject = new JSONObject(message);
+                            String seat = jsonObject.get("seat").toString();
+                            String mem_no = jsonObject.get("mem_no").toString();
 
-                                seatStatus.put(seat,2);
-                                initTable();
+                            if(!mem_no.equals(mem_No)) {
 
-                            } else if(seatStatus.get(seat) == 2) {
+                                if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
-                                seatStatus.put(seat,3);
-                                initTable();
+                                    seatStatus.put(seat,2);
+                                    initTable();
+
+                                } else if(seatStatus.get(seat) == 2) {
+
+                                    seatStatus.put(seat,3);
+                                    initTable();
+                                }
+
                             }
 
+                        } else {
+                            String[] seatArray = message.split(":");
+
+                            if("add".equals(seatArray[seatArray.length-1])) {
+                                for(String seat : seatArray) {
+                                    if(!"add".equals(seat)) {
+                                        seatStatus.put(seat,2);
+                                        initTable();
+                                    }
+                                }
+                            }
+
+                            if("clear".equals(seatArray[seatArray.length-1])) {
+                                for(String seat : seatArray) {
+                                    if(!"clear".equals(seat)) {
+                                        seatStatus.put(seat,3);
+                                        initTable();
+                                    }
+                                }
+                            }
                         }
 
                     } catch (JSONException e) {
@@ -730,6 +754,7 @@ public class chooseTableActivity extends AppCompatActivity {
                                         Util.showToast(chooseTableActivity.this, R.string.msg_FailCreateRes);
                                     } else {
                                         Toast.makeText(chooseTableActivity.this, "訂位成功!", Toast.LENGTH_SHORT).show();
+                                        myWebSocketClient.close();
                                         Intent intent = new Intent(chooseTableActivity.this, MainActivity.class);
                                         Bundle bundle = new Bundle();
                                         intent.putExtras(bundle);
@@ -799,4 +824,5 @@ public class chooseTableActivity extends AppCompatActivity {
         }
         super.onPause();
     }
+
 }

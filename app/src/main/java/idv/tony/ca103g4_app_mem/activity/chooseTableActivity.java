@@ -241,7 +241,7 @@ public class chooseTableActivity extends AppCompatActivity {
         private TableAdapter(Context context, List<DeskVO> deskList, String region) {
 
             for(DeskVO desk : deskList) {
-                if(region.equals(desk.getDek_id().substring(0,2))) {
+                if(region.equals(desk.getDek_id().substring(2,3))) {
                     this.deskList.add(desk);
                 }
             }
@@ -271,19 +271,19 @@ public class chooseTableActivity extends AppCompatActivity {
             int seatPosition = 1;
             if (convertView == null) {
                 switch (region) {
-                    case "0A":
+                    case "A":
                         convertView = layoutInflater.inflate(R.layout.gridview_table, parent, false);
                         seatPosition = i+1;
                         break;
-                    case "0B":
+                    case "B":
                         convertView = layoutInflater.inflate(R.layout.gridview_tableb, parent, false);
                         seatPosition = (i*2)+1;
                         break;
-                    case "0C":
+                    case "C":
                         convertView = layoutInflater.inflate(R.layout.gridview_tablec, parent, false);
                         seatPosition = (i*4)+1;
                         break;
-                    case "0D":
+                    case "D":
                         convertView = layoutInflater.inflate(R.layout.gridview_tabled, parent, false);
                         seatPosition = (i*6)+1;
                         break;
@@ -314,7 +314,7 @@ public class chooseTableActivity extends AppCompatActivity {
                 public void onClick(View view) {
 
 
-                    String seat = region.substring(1,2)+Integer.toString(finalSeatPosition);
+                    String seat = region.substring(0,1)+Integer.toString(finalSeatPosition);
 
                     if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
@@ -349,12 +349,12 @@ public class chooseTableActivity extends AppCompatActivity {
                 }
             });
 
-            if("0B".equals(region) || "0C".equals(region) || "0D".equals(region)) {
+            if("B".equals(region) || "C".equals(region) || "D".equals(region)) {
                 holder.ivTableImg2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        String seat = region.substring(1,2)+Integer.toString(finalSeatPosition+1);
+                        String seat = region.substring(0,1)+Integer.toString(finalSeatPosition+1);
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
@@ -390,12 +390,12 @@ public class chooseTableActivity extends AppCompatActivity {
                 });
             }
 
-            if("0C".equals(region) || "0D".equals(region)) {
+            if("C".equals(region) || "D".equals(region)) {
                 holder.ivTableImg3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        String seat = region.substring(1,2)+Integer.toString(finalSeatPosition+2);
+                        String seat = region.substring(0,1)+Integer.toString(finalSeatPosition+2);
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
@@ -434,7 +434,7 @@ public class chooseTableActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        String seat = region.substring(1,2)+Integer.toString(finalSeatPosition+3);
+                        String seat = region.substring(0,1)+Integer.toString(finalSeatPosition+3);
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
@@ -470,12 +470,12 @@ public class chooseTableActivity extends AppCompatActivity {
                 });
             }
 
-            if("0D".equals(region)) {
+            if("D".equals(region)) {
                 holder.ivTableImg5.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        String seat = region.substring(1,2)+Integer.toString(finalSeatPosition+4);
+                        String seat = region.substring(0,1)+Integer.toString(finalSeatPosition+4);
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
@@ -514,7 +514,7 @@ public class chooseTableActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        String seat = region.substring(1,2)+Integer.toString(finalSeatPosition+5);
+                        String seat = region.substring(0,1)+Integer.toString(finalSeatPosition+5);
 
                         if(!seatStatus.containsKey(seat) || seatStatus.get(seat) == 3) {
 
@@ -558,7 +558,7 @@ public class chooseTableActivity extends AppCompatActivity {
                 Object myKey = it.next();
                 seat = myKey.toString();
                 switch (region) {
-                    case "0A":
+                    case "A":
                         seatPosition = i+1;
                         if(("A"+Integer.toString(seatPosition)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg1.setBackgroundResource(R.color.colorYellow);
@@ -567,7 +567,7 @@ public class chooseTableActivity extends AppCompatActivity {
                             holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
                         }
                         break;
-                    case "0B":
+                    case "B":
                         seatPosition = (i*2)+1;
                         if(("B"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg2.setBackgroundResource(R.color.colorYellow);
@@ -583,7 +583,7 @@ public class chooseTableActivity extends AppCompatActivity {
                         }
 
                         break;
-                    case "0C":
+                    case "C":
                         seatPosition = (i*4)+1;
                         if(("C"+Integer.toString(seatPosition+3)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg4.setBackgroundResource(R.color.colorYellow);
@@ -610,7 +610,7 @@ public class chooseTableActivity extends AppCompatActivity {
                             holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
                         }
                         break;
-                    case "0D":
+                    case "D":
                         seatPosition = (i*6)+1;
                         if(("D"+Integer.toString(seatPosition+5)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg6.setBackgroundResource(R.color.colorYellow);
@@ -671,16 +671,16 @@ public class chooseTableActivity extends AppCompatActivity {
 
         // 設定TableAdapter帶入參數deskList
         GridView gdTable = findViewById(R.id.gvTable);
-        gdTable.setAdapter(new TableAdapter(this,deskList,"0A"));
+        gdTable.setAdapter(new TableAdapter(this,deskList,"A"));
 
         GridView gdTableB = findViewById(R.id.gvTableB);
-        gdTableB.setAdapter(new TableAdapter(this,deskList,"0B"));
+        gdTableB.setAdapter(new TableAdapter(this,deskList,"B"));
 
         GridView gdTableC = findViewById(R.id.gvTableC);
-        gdTableC.setAdapter(new TableAdapter(this,deskList,"0C"));
+        gdTableC.setAdapter(new TableAdapter(this,deskList,"C"));
 
         GridView gdTableD = findViewById(R.id.gvTableD);
-        gdTableD.setAdapter(new TableAdapter(this,deskList,"0D"));
+        gdTableD.setAdapter(new TableAdapter(this,deskList,"D"));
 
     }
 
@@ -739,7 +739,7 @@ public class chooseTableActivity extends AppCompatActivity {
                                     String jsonOut = jsonObject.toString();
                                     reservationAddTask = new CommonTask(url, jsonOut);
 
-                                    // 訂位紀錄新增成功會轉換至MainActivity頁面，失敗則show出FailCreateOrder訊息
+                                    // 訂位紀錄新增成功會轉換至MainActivity頁面，失敗則show出FailCreateReservation訊息
                                     ResVO successRes = null;
                                     try {
 

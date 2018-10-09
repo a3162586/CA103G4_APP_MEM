@@ -240,9 +240,9 @@ public class BookingActivity extends AppCompatActivity {
 
     // 將指定的日期顯示在TextView上
     private static void updateInfo() {
-        tvDiningDate.setText(new StringBuilder().append(year).append("/")
+        tvDiningDate.setText(new StringBuilder().append(year).append("-")
                 //「month + 1」是因為一月的值是0而非1
-                .append(parseNum(month + 1)).append("/").append(parseNum(day)));
+                .append(parseNum(month + 1)).append("-").append(parseNum(day)));
         diningDate = tvDiningDate.getText().toString();
     }
 

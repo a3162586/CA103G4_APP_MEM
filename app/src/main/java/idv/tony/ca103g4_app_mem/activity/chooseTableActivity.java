@@ -100,7 +100,6 @@ public class chooseTableActivity extends AppCompatActivity {
                 public void run() {
                     try {
 
-                        Log.e("xxxxxxxx",message);
                         if(message.isEmpty())
                             return;
                         else if("{".equals(message.substring(0,1))) {
@@ -735,6 +734,7 @@ public class chooseTableActivity extends AppCompatActivity {
                                     jsonObject.addProperty("action", "add");
                                     jsonObject.addProperty("reservation", resStr);
                                     jsonObject.addProperty("branch_no", branch_no);
+                                    jsonObject.addProperty("branch_name", branchName);
                                     jsonObject.addProperty("seatStr", seatStr.toString());
                                     String jsonOut = jsonObject.toString();
                                     reservationAddTask = new CommonTask(url, jsonOut);
@@ -781,7 +781,7 @@ public class chooseTableActivity extends AppCompatActivity {
     public Timestamp stringToTimestamp(String dateStr) {
         DateFormat formatter ;
         Date date = new Date();
-        formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
             date = formatter.parse(dateStr);
         } catch (ParseException e) {
@@ -794,7 +794,7 @@ public class chooseTableActivity extends AppCompatActivity {
     public long stringToTimeInMillis(String dateStr) {
         Calendar calendar = Calendar.getInstance();
         try {
-            calendar.setTime(new SimpleDateFormat("yyyy/MM/dd HH:mm").parse(dateStr));
+            calendar.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateStr));
         } catch (ParseException e) {
             e.printStackTrace();
         }

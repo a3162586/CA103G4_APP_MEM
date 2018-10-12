@@ -1,6 +1,7 @@
 package idv.tony.ca103g4_app_mem.fragment;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,13 +18,15 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft_17;
+import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Locale;
 
@@ -32,14 +36,15 @@ import idv.tony.ca103g4_app_mem.main.Util;
 public class MessageFragment extends Fragment {
 
     private final static String TAG = "MessageFragment";
-//    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/CustomerService/";
-    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/CustomerService/";
+    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/CustomerService/";
+//    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/CustomerService/";
 
     private MyWebSocketClient myWebSocketClient;
-    private TextView tvMessageOther,tvMessageSelf,tvConnect;
+    private TextView tvConnect;
     private EditText etMessage;
     private Button btSend;
     private ScrollView scrollView;
+    private LinearLayout layout;
     private String myName;
     private URI uri;
 
@@ -47,7 +52,7 @@ public class MessageFragment extends Fragment {
 
         MyWebSocketClient(URI serverURI) {
             // Draft_17是連接協議，就是標準的RFC 6455（JSR356）
-            super(serverURI, new Draft_17());
+            super(serverURI, new Draft_6455());
         }
 
         @Override
@@ -89,17 +94,16 @@ public class MessageFragment extends Fragment {
 
                         switch (type) {
                             case "sysMsg":
-                                tvConnect.setText(userName+" "+message);
+                                if(userName.equals(myName))
+                                    tvConnect.setText(userName+" "+message);
                                 break;
                             case "userMsg":
                                 if(userName.equals(myName)) {
-                                    tvMessageSelf.append(userName+":\n"+message+"\n");
-                                    tvMessageOther.append("\n\n");
+                                    showMessage(userName, message,false);
                                 }
 
                                 else{
-                                    tvMessageOther.append(userName+":\n"+message+"\n");
-                                    tvMessageSelf.append("\n\n");
+                                    showMessage(userName, message,true);
                                 }
                                 break;
                         }
@@ -143,17 +147,15 @@ public class MessageFragment extends Fragment {
 
         SharedPreferences preferences = getActivity().getSharedPreferences(Util.PREF_FILE,
                 getActivity().MODE_PRIVATE);
-        myName = preferences.getString("mem_No","");
-
-        tvMessageOther = view.findViewById(R.id.tvMessageOther);
-        tvMessageSelf = view.findViewById(R.id.tvMessageSelf);
+        myName = preferences.getString("mem_Name","");
         tvConnect = view.findViewById(R.id.tvConnect);
         etMessage = view.findViewById(R.id.etMessage);
         btSend = view.findViewById(R.id.btSend);
         scrollView = view.findViewById(R.id.scrollView);
+        layout = view.findViewById(R.id.layout);
 
         try {
-            uri = new URI(SERVER_URI + myName + "/" + "E000000002");
+            uri = new URI(SERVER_URI + encodeUrl(myName) + "/" + "E000000002");
         } catch (URISyntaxException e) {
             Log.e(TAG, e.toString());
         }
@@ -181,6 +183,31 @@ public class MessageFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void showMessage(String userName, String message, boolean left) {
+        String text = userName + ": " + message;
+        View view;
+        // 準備左右2種layout給不同種類發訊者(他人/自己)使用
+        if (left) {
+            view = View.inflate(getActivity(), R.layout.message_left, null);
+
+        } else {
+            view = View.inflate(getActivity(), R.layout.message_right, null);
+        }
+        TextView textView = view.findViewById(R.id.textView);
+        textView.setText(text);
+        layout.addView(view);
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
+    }
+
+    public String encodeUrl(String url) {
+        return Uri.encode(url, "-![.:/,%?&=]");
     }
 
     @Override

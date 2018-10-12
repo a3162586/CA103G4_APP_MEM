@@ -24,7 +24,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft_17;
+import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,8 +55,8 @@ import idv.tony.ca103g4_app_mem.task.CommonTask;
 public class chooseTableActivity extends AppCompatActivity {
 
     private final static String TAG = "chooseTableActivity";
-//    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/AndroidMyBookingServer/";
-    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/AndroidMyBookingServer/";
+    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/AndroidMyBookingServer/";
+//    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/AndroidMyBookingServer/";
     private MyWebSocketClient myWebSocketClient;
     private URI uri;
     private List<DeskVO> deskList;
@@ -71,7 +71,7 @@ public class chooseTableActivity extends AppCompatActivity {
 
         MyWebSocketClient(URI serverURI) {
             // Draft_17是連接協議，就是標準的RFC 6455（JSR356）
-            super(serverURI, new Draft_17());
+            super(serverURI, new Draft_6455());
         }
 
         @Override

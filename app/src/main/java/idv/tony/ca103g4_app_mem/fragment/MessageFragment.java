@@ -1,6 +1,7 @@
 package idv.tony.ca103g4_app_mem.fragment;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -23,29 +25,30 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Locale;
 
 import idv.tony.ca103g4_app_mem.R;
 import idv.tony.ca103g4_app_mem.main.Util;
+import idv.tony.ca103g4_app_mem.task.ImageTask;
 
 public class MessageFragment extends Fragment {
 
     private final static String TAG = "MessageFragment";
-    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/CustomerService/";
-//    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/CustomerService/";
+//    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/CustomerService/";
+    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/CustomerService/";
 
     private MyWebSocketClient myWebSocketClient;
+    private ImageTask getMemPhotoTask;
     private TextView tvConnect;
     private EditText etMessage;
     private Button btSend;
     private ScrollView scrollView;
     private LinearLayout layout;
-    private String myName;
+    private String memNo,myName;
+    private Bitmap memPhoto;
     private URI uri;
 
     private class MyWebSocketClient extends WebSocketClient {
@@ -147,12 +150,24 @@ public class MessageFragment extends Fragment {
 
         SharedPreferences preferences = getActivity().getSharedPreferences(Util.PREF_FILE,
                 getActivity().MODE_PRIVATE);
+        memNo = preferences.getString("mem_No","");
         myName = preferences.getString("mem_Name","");
         tvConnect = view.findViewById(R.id.tvConnect);
         etMessage = view.findViewById(R.id.etMessage);
         btSend = view.findViewById(R.id.btSend);
         scrollView = view.findViewById(R.id.scrollView);
         layout = view.findViewById(R.id.layout);
+
+        //取出會員大頭照
+        String url = Util.URL + "AndroidMemberServlet";
+        String pk = memNo;
+        int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
+        getMemPhotoTask = new ImageTask(url, pk, imageSize);
+        try {
+            memPhoto = getMemPhotoTask.execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
             uri = new URI(SERVER_URI + encodeUrl(myName) + "/" + "E000000002");
@@ -197,6 +212,9 @@ public class MessageFragment extends Fragment {
         }
         TextView textView = view.findViewById(R.id.textView);
         textView.setText(text);
+        ImageView imageView = view.findViewById(R.id.imageView);
+        imageView.setImageBitmap(memPhoto);
+
         layout.addView(view);
         scrollView.post(new Runnable() {
             @Override

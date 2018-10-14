@@ -34,21 +34,23 @@ import idv.tony.ca103g4_app_mem.R;
 import idv.tony.ca103g4_app_mem.main.Util;
 import idv.tony.ca103g4_app_mem.task.ImageTask;
 
+import static android.widget.ImageView.ScaleType.CENTER_CROP;
+
 public class MessageFragment extends Fragment {
 
     private final static String TAG = "MessageFragment";
-//    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/CustomerService/";
-    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/CustomerService/";
+    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/CustomerService/";
+//    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/CustomerService/";
 
     private MyWebSocketClient myWebSocketClient;
-    private ImageTask getMemPhotoTask;
+    private ImageTask getMemPhotoTask,getEmpPhotoTask;
     private TextView tvConnect;
     private EditText etMessage;
     private Button btSend;
     private ScrollView scrollView;
     private LinearLayout layout;
-    private String memNo,myName;
-    private Bitmap memPhoto;
+    private String memNo,myName,empName="";
+    private Bitmap memPhoto,empPhoto;
     private URI uri;
 
     private class MyWebSocketClient extends WebSocketClient {
@@ -89,11 +91,8 @@ public class MessageFragment extends Fragment {
                     try {
                         JSONObject jsonObject = new JSONObject(message);
                         String userName = jsonObject.get("username").toString();
-                        String message = jsonObject.get("message").toString();
+                        String message = jsonObject.get("message").toString().trim();
                         String type = jsonObject.get("type").toString();
-                        String time = "";
-                        if("userMsg".equals(type))
-                            time = jsonObject.get("time").toString();
 
                         switch (type) {
                             case "sysMsg":
@@ -102,11 +101,15 @@ public class MessageFragment extends Fragment {
                                 break;
                             case "userMsg":
                                 if(userName.equals(myName)) {
-                                    showMessage(userName, message,false);
+                                    showMessage(memPhoto, userName, message,false);
                                 }
 
                                 else{
-                                    showMessage(userName, message,true);
+                                    if(!userName.equals(empName)) {
+                                        empName = userName;
+                                        getEmpPhoto();
+                                    }
+                                    showMessage(empPhoto, userName, message,true);
                                 }
                                 break;
                         }
@@ -160,7 +163,7 @@ public class MessageFragment extends Fragment {
 
         //取出會員大頭照
         String url = Util.URL + "AndroidMemberServlet";
-        String pk = memNo;
+        String pk = myName;
         int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
         getMemPhotoTask = new ImageTask(url, pk, imageSize);
         try {
@@ -190,7 +193,9 @@ public class MessageFragment extends Fragment {
                 jsonObject.addProperty("message", message);
                 jsonObject.addProperty("type", "userMsg");
                 jsonObject.addProperty("time", new Date().toLocaleString());
+                jsonObject.addProperty("picMem", "<img class=\"nav-item \" src=\"/CA103G4/front_end/member/member.do?mem_No="+memNo+"\" style=\"display:;height:50px;width:50px;border-radius:50%;\">");
                 myWebSocketClient.send(jsonObject.toString());
+                etMessage.setText("");
                 Log.d(TAG, "output: " + jsonObject.toString());
             }
         });
@@ -200,20 +205,23 @@ public class MessageFragment extends Fragment {
         return view;
     }
 
-    private void showMessage(String userName, String message, boolean left) {
+    public void showMessage(Bitmap photo, String userName, String message, boolean left) {
         String text = userName + ": " + message;
         View view;
         // 準備左右2種layout給不同種類發訊者(他人/自己)使用
         if (left) {
             view = View.inflate(getActivity(), R.layout.message_left, null);
-
         } else {
             view = View.inflate(getActivity(), R.layout.message_right, null);
+
         }
         TextView textView = view.findViewById(R.id.textView);
         textView.setText(text);
         ImageView imageView = view.findViewById(R.id.imageView);
-        imageView.setImageBitmap(memPhoto);
+        imageView.setMaxHeight(20);
+        imageView.setMaxWidth(20);
+        imageView.setScaleType(CENTER_CROP);
+        imageView.setImageBitmap(photo);
 
         layout.addView(view);
         scrollView.post(new Runnable() {
@@ -226,6 +234,18 @@ public class MessageFragment extends Fragment {
 
     public String encodeUrl(String url) {
         return Uri.encode(url, "-![.:/,%?&=]");
+    }
+
+    public void getEmpPhoto() {
+        String url = Util.URL + "AndroidEmployeeServlet";
+        String pk = empName;
+        int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
+        getEmpPhotoTask = new ImageTask(url, pk, imageSize);
+        try {
+            empPhoto = getEmpPhotoTask.execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

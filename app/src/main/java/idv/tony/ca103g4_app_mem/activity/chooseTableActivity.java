@@ -325,7 +325,7 @@ public class chooseTableActivity extends AppCompatActivity {
                         }
 
                         seatStatus.put(seat,1);
-                        holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
+                        holder.ivTableImg1.setBackgroundResource(R.color.colorBlue);
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("seat", seat);
                         jsonObject.addProperty("mem_no", mem_No);
@@ -365,7 +365,7 @@ public class chooseTableActivity extends AppCompatActivity {
                             }
 
                             seatStatus.put(seat,1);
-                            holder.ivTableImg2.setBackgroundResource(R.color.colorRed);
+                            holder.ivTableImg2.setBackgroundResource(R.color.colorBlue);
                             JsonObject jsonObject = new JsonObject();
                             jsonObject.addProperty("seat", seat);
                             jsonObject.addProperty("mem_no", mem_No);
@@ -406,7 +406,7 @@ public class chooseTableActivity extends AppCompatActivity {
                             }
 
                             seatStatus.put(seat,1);
-                            holder.ivTableImg3.setBackgroundResource(R.color.colorRed);
+                            holder.ivTableImg3.setBackgroundResource(R.color.colorBlue);
                             JsonObject jsonObject = new JsonObject();
                             jsonObject.addProperty("seat", seat);
                             jsonObject.addProperty("mem_no", mem_No);
@@ -445,7 +445,7 @@ public class chooseTableActivity extends AppCompatActivity {
                             }
 
                             seatStatus.put(seat,1);
-                            holder.ivTableImg4.setBackgroundResource(R.color.colorRed);
+                            holder.ivTableImg4.setBackgroundResource(R.color.colorBlue);
                             JsonObject jsonObject = new JsonObject();
                             jsonObject.addProperty("seat", seat);
                             jsonObject.addProperty("mem_no", mem_No);
@@ -486,7 +486,7 @@ public class chooseTableActivity extends AppCompatActivity {
                             }
 
                             seatStatus.put(seat,1);
-                            holder.ivTableImg5.setBackgroundResource(R.color.colorRed);
+                            holder.ivTableImg5.setBackgroundResource(R.color.colorBlue);
                             JsonObject jsonObject = new JsonObject();
                             jsonObject.addProperty("seat", seat);
                             jsonObject.addProperty("mem_no", mem_No);
@@ -525,7 +525,7 @@ public class chooseTableActivity extends AppCompatActivity {
                             }
 
                             seatStatus.put(seat,1);
-                            holder.ivTableImg6.setBackgroundResource(R.color.colorRed);
+                            holder.ivTableImg6.setBackgroundResource(R.color.colorBlue);
                             JsonObject jsonObject = new JsonObject();
                             jsonObject.addProperty("seat", seat);
                             jsonObject.addProperty("mem_no", mem_No);
@@ -561,92 +561,92 @@ public class chooseTableActivity extends AppCompatActivity {
                     case "A":
                         seatPosition = i+1;
                         if(("A"+Integer.toString(seatPosition)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg1.setBackgroundResource(R.color.colorYellow);
+                            holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
                         }
                         if(("A"+Integer.toString(seatPosition)).equals(seat) && seatStatus.get(myKey) == 1) {
-                            holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
+                            holder.ivTableImg1.setBackgroundResource(R.color.colorBlue);
                         }
                         break;
                     case "B":
                         seatPosition = (i*2)+1;
                         if(("B"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg2.setBackgroundResource(R.color.colorYellow);
-                        }
-                        if(("B"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 1) {
                             holder.ivTableImg2.setBackgroundResource(R.color.colorRed);
                         }
+                        if(("B"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 1) {
+                            holder.ivTableImg2.setBackgroundResource(R.color.colorBlue);
+                        }
                         if(("B"+Integer.toString(seatPosition)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg1.setBackgroundResource(R.color.colorYellow);
+                            holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
                         }
                         if(("B"+Integer.toString(seatPosition)).equals(seat) && seatStatus.get(myKey) == 1) {
-                            holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
+                            holder.ivTableImg1.setBackgroundResource(R.color.colorBlue);
                         }
 
                         break;
                     case "C":
                         seatPosition = (i*4)+1;
                         if(("C"+Integer.toString(seatPosition+3)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg4.setBackgroundResource(R.color.colorYellow);
-                        }
-                        if(("C"+Integer.toString(seatPosition+3)).equals(seat) && seatStatus.get(myKey) == 1) {
                             holder.ivTableImg4.setBackgroundResource(R.color.colorRed);
                         }
-                        if(("C"+Integer.toString(seatPosition+2)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg3.setBackgroundResource(R.color.colorYellow);
+                        if(("C"+Integer.toString(seatPosition+3)).equals(seat) && seatStatus.get(myKey) == 1) {
+                            holder.ivTableImg4.setBackgroundResource(R.color.colorBlue);
                         }
-                        if(("C"+Integer.toString(seatPosition+2)).equals(seat) && seatStatus.get(myKey) == 1) {
+                        if(("C"+Integer.toString(seatPosition+2)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg3.setBackgroundResource(R.color.colorRed);
                         }
-                        if(("C"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg2.setBackgroundResource(R.color.colorYellow);
+                        if(("C"+Integer.toString(seatPosition+2)).equals(seat) && seatStatus.get(myKey) == 1) {
+                            holder.ivTableImg3.setBackgroundResource(R.color.colorBlue);
                         }
-                        if(("C"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 1) {
+                        if(("C"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg2.setBackgroundResource(R.color.colorRed);
                         }
+                        if(("C"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 1) {
+                            holder.ivTableImg2.setBackgroundResource(R.color.colorBlue);
+                        }
                         if(("C"+Integer.toString(seatPosition)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg1.setBackgroundResource(R.color.colorYellow);
+                            holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
                         }
                         if(("C"+Integer.toString(seatPosition)).equals(seat) && seatStatus.get(myKey) == 1) {
-                            holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
+                            holder.ivTableImg1.setBackgroundResource(R.color.colorBlue);
                         }
                         break;
                     case "D":
                         seatPosition = (i*6)+1;
                         if(("D"+Integer.toString(seatPosition+5)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg6.setBackgroundResource(R.color.colorYellow);
-                        }
-                        if(("D"+Integer.toString(seatPosition+5)).equals(seat) && seatStatus.get(myKey) == 1) {
                             holder.ivTableImg6.setBackgroundResource(R.color.colorRed);
                         }
-                        if(("D"+Integer.toString(seatPosition+4)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg5.setBackgroundResource(R.color.colorYellow);
+                        if(("D"+Integer.toString(seatPosition+5)).equals(seat) && seatStatus.get(myKey) == 1) {
+                            holder.ivTableImg6.setBackgroundResource(R.color.colorBlue);
                         }
-                        if(("D"+Integer.toString(seatPosition+4)).equals(seat) && seatStatus.get(myKey) == 1) {
+                        if(("D"+Integer.toString(seatPosition+4)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg5.setBackgroundResource(R.color.colorRed);
                         }
-                        if(("D"+Integer.toString(seatPosition+3)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg4.setBackgroundResource(R.color.colorYellow);
+                        if(("D"+Integer.toString(seatPosition+4)).equals(seat) && seatStatus.get(myKey) == 1) {
+                            holder.ivTableImg5.setBackgroundResource(R.color.colorBlue);
                         }
-                        if(("D"+Integer.toString(seatPosition+3)).equals(seat) && seatStatus.get(myKey) == 1) {
+                        if(("D"+Integer.toString(seatPosition+3)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg4.setBackgroundResource(R.color.colorRed);
                         }
-                        if(("D"+Integer.toString(seatPosition+2)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg3.setBackgroundResource(R.color.colorYellow);
+                        if(("D"+Integer.toString(seatPosition+3)).equals(seat) && seatStatus.get(myKey) == 1) {
+                            holder.ivTableImg4.setBackgroundResource(R.color.colorBlue);
                         }
-                        if(("D"+Integer.toString(seatPosition+2)).equals(seat) && seatStatus.get(myKey) == 1) {
+                        if(("D"+Integer.toString(seatPosition+2)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg3.setBackgroundResource(R.color.colorRed);
                         }
-                        if(("D"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg2.setBackgroundResource(R.color.colorYellow);
+                        if(("D"+Integer.toString(seatPosition+2)).equals(seat) && seatStatus.get(myKey) == 1) {
+                            holder.ivTableImg3.setBackgroundResource(R.color.colorBlue);
                         }
-                        if(("D"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 1) {
+                        if(("D"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 2) {
                             holder.ivTableImg2.setBackgroundResource(R.color.colorRed);
                         }
+                        if(("D"+Integer.toString(seatPosition+1)).equals(seat) && seatStatus.get(myKey) == 1) {
+                            holder.ivTableImg2.setBackgroundResource(R.color.colorBlue);
+                        }
                         if(("D"+Integer.toString(seatPosition)).equals(seat) && seatStatus.get(myKey) == 2) {
-                            holder.ivTableImg1.setBackgroundResource(R.color.colorYellow);
+                            holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
                         }
                         if(("D"+Integer.toString(seatPosition)).equals(seat) && seatStatus.get(myKey) == 1) {
-                            holder.ivTableImg1.setBackgroundResource(R.color.colorRed);
+                            holder.ivTableImg1.setBackgroundResource(R.color.colorBlue);
                         }
                         break;
                 }

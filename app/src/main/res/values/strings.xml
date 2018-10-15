@@ -60,4 +60,5 @@
         <item>派送單編號</item>
     </string-array>
     <string name="couponGuide">請詳閱優惠說明，並在點餐時出示優惠卷QRCode條碼，以供服務人員掃描確認完成優惠折扣</string>
+    <string name="booking">訂位注意事項:\n＃訂位保留10分鐘\n＃用餐時間90分鐘\n＃若需取消或更改訂位，請至少提前一小時以上電話告知</string>
 </resources>

@@ -55,8 +55,9 @@ import idv.tony.ca103g4_app_mem.task.CommonTask;
 public class chooseTableActivity extends AppCompatActivity {
 
     private final static String TAG = "chooseTableActivity";
-    private final static String SERVER_URI = "ws://192.168.1.103:8081/CA103G4/AndroidMyBookingServer/";
+//    private final static String SERVER_URI = "ws://192.168.196.209:8081/CA103G4/AndroidMyBookingServer/";
 //    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/AndroidMyBookingServer/";
+    private final static String SERVER_URI = "ws://52.194.227.12:8081/CA103G4/AndroidMyBookingServer/";
     private MyWebSocketClient myWebSocketClient;
     private URI uri;
     private List<DeskVO> deskList;

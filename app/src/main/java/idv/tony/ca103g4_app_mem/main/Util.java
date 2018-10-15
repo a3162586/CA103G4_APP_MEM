@@ -8,8 +8,9 @@ import android.net.NetworkInfo;
 import android.widget.Toast;
 
 public class Util {
-    public final static String URL = "http://192.168.1.103:8081/CA103G4/";
+//    public final static String URL = "http://192.168.196.209:8081/CA103G4/";
 //    public final static String URL = "http://10.0.2.2:8081/CA103G4/";
+    public final static String URL = "http://52.194.227.12:8081/CA103G4/";
 
     // 偏好設定檔案名稱
     public final static String PREF_FILE = "preference";

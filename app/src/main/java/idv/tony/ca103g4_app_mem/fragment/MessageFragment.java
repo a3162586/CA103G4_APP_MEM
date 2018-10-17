@@ -41,7 +41,7 @@ public class MessageFragment extends Fragment {
     private final static String TAG = "MessageFragment";
 //    private final static String SERVER_URI = "ws://192.168.196.209:8081/CA103G4/CustomerService/";
 //    private final static String SERVER_URI = "ws://10.0.2.2:8081/CA103G4/CustomerService/";
-    private final static String SERVER_URI = "ws://52.194.227.12:8081/CA103G4/CustomerService/";
+    private final static String SERVER_URI = "ws://ca103g4.tk/CA103G4/CustomerService/";
 
     private MyWebSocketClient myWebSocketClient;
     private ImageTask getMemPhotoTask,getEmpPhotoTask;
